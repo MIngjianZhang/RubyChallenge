@@ -3,11 +3,12 @@
 rescue Exception => e
 if I want to add class from another file, I use	
 require_relative "./board"
-
-
-require_relative "./PlayerAI"
-require_relative "./BoardManage"
 =end
+
+require_relative "PlayerAI"
+require_relative "Board"
+
+
 class Main
 
   INFO = <<Doc

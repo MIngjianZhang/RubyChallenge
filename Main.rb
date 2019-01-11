@@ -3,14 +3,13 @@
 rescue Exception => e
 if I want to add class from another file, I use	
 require_relative "./board"
-=end
+
 
 require_relative "./PlayerAI"
 require_relative "./BoardManage"
-
+=end
 class Main
 
-  POSITION = %w[1 2 3 4 5 6 7 8 9]
   INFO = <<Doc
 
 ************************************************************************
@@ -25,28 +24,61 @@ Doc
     puts INFO
 	end
  
-	def start
-    puts "\n >> PLEASE SEE THE POSITIONS OF THE BOARD << \n\n"
+	def start ()
+        puts "\n >> PLEASE SEE THE POSITIONS OF THE BOARD << \n\n"
 
-    print "Type what the board will look like start with the width: "
-    boardwidth = gets.chomp
-    puts boardwidth
+        print "Choose your opponent:\n1. random\n2. minmax\n3. minmax w/ ab-pruning\n4. h-minmax w/ ab-pruning"
+        AItype = gets.chomp
+        self.AI = self.initialize_AI_player(AItype)
 
-    print "Then, tell me what the height of the board would be: "
-    boardheight = gets.chomp
-    puts boardheight
+        print "Choose your game:\n1. 3x3x3\n2. 3x5x3\n3. 6x7x4"
+        boardsize = gets.chomp
+        self.board = self.initialize_board(boardsize)
 
-    print"alright, how many in a line (any direction) should one be considered winning? (do not be bigger than height or width) "
-    boardWinCount = gets.chomp
-    puts boardWinCount
-    
-    print "Finally, do you want your AI to be a moron or a guru? (1 for moron 2 for guru)"
-    aitype = gets.chomp
-    puts aitype
+        print"alright, how many in a line (any direction) should one be considered winning? (do not be bigger than height or width) "
+        boardWinCount = gets.chomp
+        puts boardWinCount
+        
 	end
 
-main = Engine.new
-main.display_info
+    def initialize_board(self, board_type):
+        if board_type == '1':
+          print('3x3x3 Board initialized')
+          return Board(3,3,3)
+        elseif board_type == '2':
+          print('3x5x3 Board initialized')
+          return Board(3,5,3)
+        elseif board_type == '3':
+          print('6x7x4 Board initialized')
+          return Board(6,7,4)
+        else:
+          raise Exception('Unknown board type')
+    end
+
+    def initialize_AI_player(self, opponent_type):
+        if opponent_type == '1':
+          print('Random player initialized')
+          return RandomPlayer('X')
+        elif opponent_type == '2':
+          print('Minmax player initialized')
+          return MinmaxPlayer('X')
+        elif opponent_type == '3':
+          print('Minmax player w/ ab pruning initialized')
+          return MinmaxAbPlayer('X')
+        elif opponent_type == '4':
+          print("This player uses iterative deepening (time boxed to 30 seconds).")
+          start_depth = input("Choose starting depth (4): ")
+          start_depth = int(start_depth) if start_depth else 4
+
+          print(f"H-Minmax player w/ ab pruning initialized with initial search depth of {start_depth}")
+          return HMinmaxAbPlayer('X', start_depth)
+        else:
+          raise Exception('Unknown player type')
+    end
+
+    sthnew = Main.new
+    sthnew.display_info
+    sthnew.start
 =begin
 x_player = Player.new("X")
 o_player = Player.new("O") # This is a robot :)
@@ -55,7 +87,4 @@ boardmanage.display_positions
 =end
 
 
-engine.start
-                                        # automatically terminate the game if player wins the game
-engine.stop # if match is draw
 end

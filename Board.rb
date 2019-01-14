@@ -1,3 +1,5 @@
+
+
 class Board
 
   def self.construct(width,height)
